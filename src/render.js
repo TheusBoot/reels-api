@@ -14,6 +14,10 @@ const ENTRY_POINT = path.resolve(__dirname, "../remotion/index.jsx");
 const PUBLIC_DIR = path.resolve(__dirname, "../public");
 const INPUTS_DIR = path.resolve(__dirname, "../data/inputs");
 const OUTPUTS_DIR = path.resolve(__dirname, "../data/outputs");
+// O @remotion/renderer baixa assets (áudio, principalmente) via HTTP pra
+// muxar no MP4 final — file:// não é aceito nesse passo. Servimos os
+// inputs por HTTP local (ver server.js) em vez de referenciar file://.
+const SELF_BASE_URL = `http://127.0.0.1:${process.env.PORT || 3000}`;
 
 // --- Defaults do servidor (nada disso é exposto na API) ---
 const DEFAULT_MIN_DURATION_SECONDS = Number(process.env.DEFAULT_MIN_DURATION_SECONDS || 10);
@@ -103,8 +107,8 @@ async function renderReelJob(jobId, { headline, description, sourceName, imagePa
   const inputProps = reelSchema.parse({
     headline,
     sourceName: sourceName || "",
-    imageSrc: fileUrl(imagePath),
-    audioSrc: audioPath ? fileUrl(audioPath) : null,
+    imageSrc: inputUrl(imagePath),
+    audioSrc: audioPath ? inputUrl(audioPath) : null,
     musicSrc: musicPath ? "music/bg.mp3" : null, // staticFile() resolve relativo ao publicDir
     introText: pickIntroPhrase(),
     showIntro: SHOW_INTRO_DEFAULT,
@@ -150,8 +154,8 @@ async function renderReelJob(jobId, { headline, description, sourceName, imagePa
   };
 }
 
-function fileUrl(absPath) {
-  return `file://${absPath}`;
+function inputUrl(absPath) {
+  return `${SELF_BASE_URL}/internal/inputs/${path.basename(absPath)}`;
 }
 
 module.exports = { renderReelJob, INPUTS_DIR, OUTPUTS_DIR, FPS };

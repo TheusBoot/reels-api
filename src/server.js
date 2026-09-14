@@ -12,6 +12,22 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "25mb" }));
 
+// O Remotion renderiza a imagem via file:// direto no Chromium (funciona),
+// mas pra colar o áudio da narração no MP4 final ele baixa o arquivo via
+// HTTP — file:// não é aceito nesse passo. Servimos os inputs aqui, restrito
+// a loopback, só pra esse uso interno (o Chromium roda no mesmo container).
+app.use(
+  "/internal/inputs",
+  (req, res, next) => {
+    const ip = req.socket.remoteAddress || "";
+    if (!["127.0.0.1", "::1", "::ffff:127.0.0.1"].includes(ip)) {
+      return res.status(403).end();
+    }
+    next();
+  },
+  express.static(INPUTS_DIR)
+);
+
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.API_KEY || "";
 // No Railway, o domínio público fica em RAILWAY_PUBLIC_DOMAIN (sem
