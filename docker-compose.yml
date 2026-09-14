@@ -1,0 +1,21 @@
+services:
+  reels-api:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+      # A voz agora é baixada DENTRO da imagem no build (veja o Dockerfile) —
+      # de propósito, pra funcionar igual no Railway (que não usa este
+      # docker-compose.yml, só o Dockerfile). Por isso não montamos mais
+      # ./voices aqui: montar por cima esconderia a voz baixada no build.
+      # Pra usar outra voz, edite os ARG no topo do Dockerfile e rode
+      # `docker compose build --no-cache` de novo.
+      - ./public/music:/app/public/music
+    shm_size: "1gb"
+    deploy:
+      resources:
+        limits:
+          memory: 6g

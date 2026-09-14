@@ -1,0 +1,16 @@
+node_modules/
+.env
+data/inputs/*
+data/outputs/*
+data/jobs.json
+!data/inputs/.gitkeep
+!data/outputs/.gitkeep
+
+# A voz é baixada no build do Docker (ver Dockerfile) — não precisa
+# versionar os arquivos .onnx no git (são pesados, 60+MB).
+voices/*.onnx
+voices/*.onnx.json
+!voices/.gitkeep
+
+*.log
+.DS_Store

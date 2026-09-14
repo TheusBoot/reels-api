@@ -1,0 +1,28 @@
+{
+  "name": "reels-api",
+  "version": "1.0.0",
+  "description": "API única: recebe imagem + manchete + descrição, devolve um Reels em MP4 pronto (narração via Piper, abertura estilo jornalístico, música de fundo — tudo pré-configurado).",
+  "type": "commonjs",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "preview": "remotion studio remotion/index.jsx"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.290",
+    "@remotion/renderer": "4.0.290",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "p-queue": "^7.4.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.290",
+    "uuid": "^9.0.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.290"
+  }
+}
