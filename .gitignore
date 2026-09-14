@@ -14,3 +14,6 @@ voices/*.onnx.json
 
 *.log
 .DS_Store
+
+# Claude Code (arquivos internos do assistente, não fazem parte do projeto)
+.claude/
